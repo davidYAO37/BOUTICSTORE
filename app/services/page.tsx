@@ -55,10 +55,8 @@ export default function ServicesPage() {
               <div className="text-primary mb-3">{service.icon}</div>
               <h5>{service.title}</h5>
               <p className="text-muted mb-4">{service.description}</p>
-              <Link href="/contact/" passHref legacyBehavior>
-                <Button variant="outline-primary" className="mt-auto">
-                  <FaPhone className="me-2" /> Nous contacter
-                </Button>
+              <Link href="/contact/" className="btn btn-outline-primary mt-auto d-inline-flex align-items-center gap-2">
+                <FaPhone /> Nous contacter
               </Link>
             </Card>
           </Col>

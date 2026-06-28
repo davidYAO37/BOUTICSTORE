@@ -16,8 +16,18 @@ export async function GET(request: NextRequest) {
   try {
     await connectToDatabase();
     const params = parseQueryParams(request);
+    const url = new URL(request.url);
     const filter: Record<string, unknown> = {};
     if (params.status) filter.status = params.status;
+    const userId = url.searchParams.get("user");
+    if (userId) filter.user = userId;
+    if (params.search) {
+      filter.$or = [
+        { firstName: { $regex: params.search, $options: "i" } },
+        { lastName:  { $regex: params.search, $options: "i" } },
+        { email:     { $regex: params.search, $options: "i" } },
+      ];
+    }
 
     const [rides, total] = await Promise.all([
       TestRide.find(filter)

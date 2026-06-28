@@ -17,6 +17,7 @@ export async function GET(request: NextRequest) {
   try {
     await connectToDatabase();
     const params = parseQueryParams(request);
+    const url = new URL(request.url);
     const filter: Record<string, unknown> = {};
     if (params.search) {
       filter.$or = [
@@ -25,6 +26,10 @@ export async function GET(request: NextRequest) {
         { lastName: { $regex: params.search, $options: "i" } },
       ];
     }
+    const role = url.searchParams.get("role");
+    if (role) filter.role = role;
+    const isActive = url.searchParams.get("isActive");
+    if (isActive !== null && isActive !== "") filter.isActive = isActive === "true";
 
     const [users, total] = await Promise.all([
       User.find(filter)

@@ -6,7 +6,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "reset-passwords": "node scripts/reset-passwords.mjs"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.4.0",

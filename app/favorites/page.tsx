@@ -37,10 +37,8 @@ export default function FavoritesPage() {
         <FaHeart size={64} className="text-muted mb-4" />
         <h2>{locale === "fr" ? "Vos favoris sont vides" : "Your favorites are empty"}</h2>
         <p className="text-muted mb-4">{locale === "fr" ? "Ajoutez des motos à vos favoris pour les retrouver ici" : "Add motorcycles to your favorites to find them here"}</p>
-        <Link href="/catalog/" passHref legacyBehavior>
-          <Button variant="primary">
-            <FaArrowLeft className="me-2" /> {locale === "fr" ? "Découvrir les motos" : "Discover motorcycles"}
-          </Button>
+        <Link href="/catalog/" className="btn btn-primary d-inline-flex align-items-center gap-2">
+          <FaArrowLeft /> {locale === "fr" ? "Découvrir les motos" : "Discover motorcycles"}
         </Link>
       </Container>
     );

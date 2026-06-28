@@ -10,10 +10,13 @@ import {
   notFoundResponse,
 } from "@/lib/api-response";
 import { z } from "zod";
+import bcrypt from "bcryptjs";
 
 const userUpdateSchema = z.object({
   role: z.enum(["admin", "sales", "warehouse", "customer"]).optional(),
   isActive: z.boolean().optional(),
+  phone: z.string().optional(),
+  password: z.string().min(6).optional(),
 });
 
 interface RouteParams {
@@ -49,7 +52,11 @@ export async function PUT(request: NextRequest, { params }: RouteParams) {
       return validationErrorResponse(formattedErrors);
     }
 
-    const user = await User.findByIdAndUpdate(id, result.data, { new: true }).select("-password");
+    const updateData: Record<string, unknown> = { ...result.data };
+    if (result.data.password) {
+      updateData.password = await bcrypt.hash(result.data.password, 10);
+    }
+    const user = await User.findByIdAndUpdate(id, updateData, { new: true }).select("-password");
     if (!user) return notFoundResponse("Utilisateur non trouvé");
     return successResponse(user, "Utilisateur mis à jour");
   } catch (error) {

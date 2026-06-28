@@ -152,7 +152,7 @@ export const testRideSchema = z.object({
   phone: z.string().min(1, "Le téléphone est requis"),
   motorcycle: objectIdSchema,
   store: objectIdSchema.optional().nullable(),
-  preferredDate: z.string().datetime().or(z.date()),
+  preferredDate: z.string().min(1, "La date est requise"),
   preferredTime: z.string().min(1, "L'heure est requise"),
   message: z.string().optional(),
   status: z.enum(["pending", "confirmed", "cancelled", "completed"]).optional(),

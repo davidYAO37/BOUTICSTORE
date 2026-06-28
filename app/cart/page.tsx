@@ -23,10 +23,8 @@ export default function CartPage() {
         <p className="text-muted mb-4">
           {locale === "fr" ? "Découvrez nos motos et ajoutez-les à votre panier" : "Discover our motorcycles and add them to your cart"}
         </p>
-        <Link href="/catalog/" passHref legacyBehavior>
-          <Button variant="primary">
-            <FaArrowLeft className="me-2" /> {locale === "fr" ? "Continuer les achats" : "Continue shopping"}
-          </Button>
+        <Link href="/catalog/" className="btn btn-primary d-inline-flex align-items-center gap-2">
+          <FaArrowLeft /> {locale === "fr" ? "Continuer les achats" : "Continue shopping"}
         </Link>
       </Container>
     );
@@ -113,10 +111,8 @@ export default function CartPage() {
               <Button variant="outline-secondary" size="sm" className="w-100 mb-2" onClick={clearCart}>
                 {locale === "fr" ? "Vider le panier" : "Clear cart"}
               </Button>
-              <Link href="/catalog/" passHref legacyBehavior>
-                <Button variant="link" className="w-100">
-                  <FaArrowLeft className="me-2" /> {locale === "fr" ? "Continuer les achats" : "Continue shopping"}
-                </Button>
+              <Link href="/catalog/" className="btn btn-link w-100 d-inline-flex align-items-center justify-content-center gap-2">
+                <FaArrowLeft /> {locale === "fr" ? "Continuer les achats" : "Continue shopping"}
               </Link>
             </Card.Body>
           </Card>

@@ -4,7 +4,7 @@ import React from "react";
 import { Modal, Form, Button, Row, Col } from "react-bootstrap";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { testRideSchema } from "@/lib/zod-schemas";
+import { testRideSchema, TestRideInput } from "@/lib/zod-schemas";
 import { useLocale } from "@/hooks/useLocale";
 import { createTestRide } from "@/services/api";
 import { toast } from "react-toastify";
@@ -23,14 +23,14 @@ export default function TestRideModal({ show, onHide, motorcycleId, motorcycleNa
     handleSubmit,
     formState: { errors, isSubmitting },
     reset,
-  } = useForm({
+  } = useForm<TestRideInput>({
     resolver: zodResolver(testRideSchema),
     defaultValues: {
       motorcycle: motorcycleId,
     },
   });
 
-  const onSubmit = async (data: Record<string, unknown>) => {
+  const onSubmit = async (data: TestRideInput) => {
     try {
       await createTestRide(data);
       toast.success(locale === "fr" ? "Demande d'essai envoyée !" : "Test ride request sent!");
@@ -82,7 +82,7 @@ export default function TestRideModal({ show, onHide, motorcycleId, motorcycleNa
             <Col md={6}>
               <Form.Group>
                 <Form.Label>{locale === "fr" ? "Date souhaitée" : "Preferred date"} *</Form.Label>
-                <Form.Control type="date" {...register("preferredDate")} isInvalid={!!errors.preferredDate} />
+                <Form.Control type="date" {...register("preferredDate")} isInvalid={!!errors.preferredDate} min={new Date().toISOString().split("T")[0]} />
                 <Form.Control.Feedback type="invalid">{errors.preferredDate?.message}</Form.Control.Feedback>
               </Form.Group>
             </Col>
