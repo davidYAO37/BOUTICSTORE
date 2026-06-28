@@ -19,9 +19,38 @@ export const authOptions: NextAuthOptions = {
         try {
           await connectToDatabase();
 
-          const dbUser = await User.findOne({
-            email: credentials.email.toLowerCase().trim(),
-          });
+          const normalizedEmail = credentials.email.toLowerCase().trim();
+
+          // ── Auto-seed admin par défaut si la base est vide ───────────────
+          const userCount = await User.countDocuments();
+          if (userCount === 0) {
+            const defaultEmail    = process.env.DEFAULT_ADMIN_EMAIL?.toLowerCase().trim() || "admin@motosboutic.ci";
+            const defaultPassword = process.env.DEFAULT_ADMIN_PASSWORD || "Admin@2024!";
+
+            if (normalizedEmail === defaultEmail) {
+              const hash = await bcrypt.hash(defaultPassword, 12);
+              const defaultAdmin = await User.create({
+                email:     defaultEmail,
+                password:  hash,
+                firstName: "Super",
+                lastName:  "Admin",
+                role:      "admin",
+                isActive:  true,
+              });
+              console.log("[AUTH] Admin par défaut créé:", defaultEmail);
+
+              return {
+                id:        defaultAdmin._id.toString(),
+                email:     defaultAdmin.email,
+                firstName: defaultAdmin.firstName,
+                lastName:  defaultAdmin.lastName,
+                role:      defaultAdmin.role,
+                image:     null,
+              };
+            }
+          }
+
+          const dbUser = await User.findOne({ email: normalizedEmail });
 
           if (!dbUser)          return null; // utilisateur inexistant
           if (!dbUser.isActive) return null; // compte désactivé
